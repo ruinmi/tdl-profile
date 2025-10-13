@@ -2,10 +2,15 @@ package main
 
 import (
 	"context"
+	"os"
+	"fmt"
+	"github.com/fatih/color"
 
 	"github.com/go-faster/errors"
 	"github.com/gotd/td/tg"
 	"github.com/iyear/tdl/extension"
+	"github.com/neilotoole/jsoncolor"
+	"github.com/mattn/go-colorable"
 	"github.com/spf13/pflag"
 )
 
