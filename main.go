@@ -18,32 +18,20 @@ func main() {
 	extension.New(extension.Options{
 		UpdateHandler: nil,
 		Middlewares:   nil,
-		// override default logger, which write to extension data dir
-		Logger: zap.Must(conf.Build(zap.AddCaller())),
+		Logger: nil,
 	})(func(ctx context.Context, e *extension.Extension) error {
-		e.Log().Info("start",
-			zap.String("name", e.Name()),
-			zap.String("data_dir", e.Config().DataDir),
-			zap.String("proxy", e.Config().Proxy),
-			zap.Bool("debug", e.Config().Debug))
-
-		// and call the API via e.Client().API()
 		self, err := e.Client().Self(ctx)
 		if err != nil {
 			return errors.Wrap(err, "get self")
 		}
 
-		e.Log().Info("get self",
-			zap.Int64("id", self.ID),
-			zap.String("username", self.Username))
-
-		b, err := json.MarshalIndent(self, "", "  ")
+		api := client.API()
+		req := &tg.AccountUpdateProfileRequest{}
+		req.SetAbout("我的新自我介绍 ✨")
+		_, err := api.AccountUpdateProfile(ctx, req)
 		if err != nil {
-			return errors.Wrap(err, "marshal self to json")
+			return errors.Wrap(err, "update profile")
 		}
-
-		fmt.Println(string(b))
-
 		return nil
 	})
 }

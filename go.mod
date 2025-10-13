@@ -1,4 +1,4 @@
-module github.com/iyear/tdl-extension-template
+module github.com/ruinmi/tdl-profile
 
 go 1.21
 
