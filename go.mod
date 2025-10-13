@@ -6,6 +6,7 @@ require (
 	github.com/go-faster/errors v0.7.1
 	github.com/iyear/tdl/extension v0.18.4
 	go.uber.org/zap v1.27.0
+	github.com/spf13/pflag v1.0.5
 )
 
 require (
