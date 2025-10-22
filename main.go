@@ -39,12 +39,16 @@ func main() {
 		Middlewares:   nil,
 		Logger:        nil,
 	})(func(ctx context.Context, e *extension.Extension) error {
+		api := e.Client().API()
 		if update.Empty() {
-			output("没有提供任何更新内容", nil, "")
+			self, err := api.UsersGetFullUser(ctx, &tg.InputUserSelf{})
+			if err != nil {
+				return errors.Wrap(err, "get current profile")
+			}
+			output("当前账号资料：", self, "")
 			return nil
 		}
 
-		api := e.Client().API()
 		req := &tg.AccountUpdateProfileRequest{}
 		if update.FirstName != nil {
 			req.SetFirstName(*update.FirstName)
@@ -59,6 +63,7 @@ func main() {
 		if err != nil {
 			return errors.Wrap(err, "update profile")
 		}
+		color.Green("资料更新成功！")
 		return nil
 	})
 }
