@@ -41,11 +41,23 @@ func main() {
 	})(func(ctx context.Context, e *extension.Extension) error {
 		api := e.Client().API()
 		if update.Empty() {
-			self, err := api.UsersGetFullUser(ctx, &tg.InputUserSelf{})
+			full, err := api.UsersGetFullUser(ctx, &tg.InputUserSelf{})
 			if err != nil {
 				return errors.Wrap(err, "get current profile")
 			}
-			output("当前账号资料：", self, "")
+
+			// 简化输出
+			user := full.Users[0].(*tg.User)
+			info := map[string]any{
+				"id":        user.ID,
+				"firstName": user.FirstName,
+				"lastName":  user.LastName,
+				"username":  user.Username,
+				"phone":     user.Phone,
+				"about":     full.FullUser.About,
+			}
+		
+			output("当前账号资料：", info, "")
 			return nil
 		}
 
